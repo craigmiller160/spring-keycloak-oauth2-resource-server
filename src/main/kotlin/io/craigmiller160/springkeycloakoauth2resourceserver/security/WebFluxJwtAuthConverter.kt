@@ -9,10 +9,10 @@ import reactor.core.publisher.Mono
 
 class WebFluxJwtAuthConverter(private val config: KeycloakResourceServerConfig) :
     Converter<Jwt, Mono<AbstractAuthenticationToken>> {
-  override fun convert(jwt: Jwt): Mono<AbstractAuthenticationToken> =
-      JwtAuthenticationToken(jwt, getRoles(jwt, config.clientId), getPrincipalName(jwt)).let {
-        Mono.just(it)
-      }
-
-  private fun getPrincipalName(jwt: Jwt): String = jwt.getClaim(config.principalAttribute)
+  override fun convert(jwt: Jwt): Mono<AbstractAuthenticationToken> {
+    val principal = jwt.getClaim<String>(config.principalAttribute)
+    return JwtAuthenticationToken(jwt, getRoles(jwt, config.clientId), principal).let {
+      Mono.just(it)
+    }
+  }
 }
