@@ -9,15 +9,18 @@ import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.stereotype.Component
 
 @Component
-class KeycloakOAuth2Customizers(private val resourceServerConfig: KeycloakResourceServerConfig) {
+class KeycloakOAuth2Customizers(private val config: KeycloakResourceServerConfig) {
   @Bean("webfluxKeycloakOAuth2ResourceServer")
   fun webfluxKeycloakOAuth2ResourceServer():
       Customizer<ServerHttpSecurity.OAuth2ResourceServerSpec> =
-      Customizer<ServerHttpSecurity.OAuth2ResourceServerSpec> { spec -> spec.jwt { jwt -> } }
+      Customizer<ServerHttpSecurity.OAuth2ResourceServerSpec> { spec ->
+        spec.jwt { jwt -> jwt.jwtAuthenticationConverter(WebFluxJwtAuthConverter(config)) }
+      }
 
   @Bean("webmvcKeycloakOAuth2ResourceServer")
   fun webmvcKeycloakOAuth2ResourceServer():
-      Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> {
-    TODO()
-  }
+      Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> =
+      Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> { spec ->
+        spec.jwt { jwt -> jwt.jwtAuthenticationConverter(WebMvcJwtAuthConverter(config)) }
+      }
 }
