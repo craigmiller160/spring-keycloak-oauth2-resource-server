@@ -10,10 +10,10 @@ data class KeycloakResourceServerConfig(val host: String, val realm: String, val
         KeycloakResourceServerConfig(
             host = environment.getProperty("spring.security.keycloak.oauth2.resourceserver.host")
                     ?: "",
-            realm = environment.getProperty("spring.security.keycloak.oauth2.resourceserver.host")
+            realm = environment.getProperty("spring.security.keycloak.oauth2.resourceserver.realm")
                     ?: "",
             clientId =
-                environment.getProperty("spring.security.keycloak.oauth2.resourceserver.host")
+                environment.getProperty("spring.security.keycloak.oauth2.resourceserver.client-id")
                     ?: "")
   }
   val issuerUri = "$host/realms/$realm"
