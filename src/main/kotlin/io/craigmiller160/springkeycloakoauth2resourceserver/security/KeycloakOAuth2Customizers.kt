@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono
 
 @Component
 class KeycloakOAuth2Customizers(private val config: KeycloakResourceServerConfig) {
+  @ConditionalOnClass(Mono::class)
   @Bean("webfluxKeycloakOAuth2ResourceServer")
   fun webfluxKeycloakOAuth2ResourceServer():
       Customizer<ServerHttpSecurity.OAuth2ResourceServerSpec> =
@@ -19,7 +20,6 @@ class KeycloakOAuth2Customizers(private val config: KeycloakResourceServerConfig
         spec.jwt { jwt -> jwt.jwtAuthenticationConverter(WebFluxJwtAuthConverter(config)) }
       }
 
-  @ConditionalOnClass(Mono::class)
   @Bean("webmvcKeycloakOAuth2ResourceServer")
   fun webmvcKeycloakOAuth2ResourceServer():
       Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> =
