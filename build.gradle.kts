@@ -25,8 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
-    compileOnly("org.springframework:spring-webflux") // TODO replace with reactor
-//    compileOnly("org.springframework:spring-webmvc")
+    compileOnly("io.projectreactor:reactor-core:3.5.6")
 
 }
 
