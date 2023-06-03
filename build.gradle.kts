@@ -1,5 +1,6 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 val projectGroup: String by project
 val projectVersion: String by project
@@ -11,6 +12,7 @@ plugins {
     id("com.diffplug.spotless") version "6.17.0"
     kotlin("jvm")
     kotlin("plugin.spring")
+    `maven-publish`
 }
 
 group = projectGroup
@@ -43,4 +45,8 @@ configure<SpotlessExtension> {
     kotlin {
         ktfmt()
     }
+}
+
+tasks.withType<BootJar> {
+    enabled = false
 }
