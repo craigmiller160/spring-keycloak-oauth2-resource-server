@@ -4,6 +4,8 @@ A wrapper around the necessary code to setup a Spring Boot OAuth2 Resource Serve
 
 ## How to Use
 
+The library uses spring auto-configuration to setup the consuming project. However, there are some requirements still:
+
 First, setup the following properties to configure the resource server:
 
 ```yaml
@@ -15,4 +17,24 @@ spring:
           host: ###
           realm: ###
           client-id: ###
+```
+
+Then, update your web security config accordingly:
+
+```kotlin
+class WebSecurityConfig(
+    private val keycloakOAuth2ResourceServerProvider: KeycloakOAuth2ResourceServerProvider
+) {
+    // For WebMVC
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain = 
+        http.oauth2ResourceServer(keycloakOAuth2ResourceServerProvider.provideWebMvc())
+            .build()
+    
+    // For WebFlux
+    @Bean
+    fun securityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain = 
+        http.oauth2ResourceServer(keycloakOAuth2ResourceServerProvider.provideWebFlux())
+            .build()
+}
 ```
